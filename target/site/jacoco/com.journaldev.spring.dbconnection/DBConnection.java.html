@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>DBConnection.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Spring MVC Example</a> &gt; <a href="index.source.html" class="el_package">com.journaldev.spring.dbconnection</a> &gt; <span class="el_source">DBConnection.java</span></div><h1>DBConnection.java</h1><pre class="source lang-java linenums">package com.journaldev.spring.dbconnection;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+
+<span class="fc" id="L6">public class DBConnection {</span>
+	
+<span class="fc" id="L8">	private Connection connect = null;</span>
+
+	
+<span class="fc" id="L11">	final private String host = &quot;bookapplication.c2yfvxjghykt.us-east-2.rds.amazonaws.com &quot;;</span>
+<span class="fc" id="L12">	final private String user = &quot;ramkumar&quot;;</span>
+<span class="fc" id="L13">	final private String passwd = &quot;ramkumar&quot;;</span>
+<span class="fc" id="L14">	final private String database = &quot;bookapp&quot;;</span>
+	
+	public Connection connectToDB() {
+		try {
+			// This will load the MySQL driver, each DB has its own driver
+<span class="fc" id="L19">			Class.forName(&quot;com.mysql.jdbc.Driver&quot;);</span>
+
+			// Setup the connection with the DB
+<span class="nc" id="L22">			connect = DriverManager.getConnection(&quot;jdbc:mysql://&quot; + host + &quot;/&quot;</span>
+					+ database + &quot;?&quot; + &quot;user=&quot; + user + &quot;&amp;password=&quot; + passwd);
+<span class="nc" id="L24">			System.out.println(&quot;Inside TRY connectToDB&quot;);</span>
+<span class="nc" id="L25">			return connect;</span>
+<span class="fc" id="L26">		} catch (Exception e) {</span>
+<span class="fc" id="L27">			System.out.println(&quot;Error in TRY connectToDB&quot;+e);</span>
+		}
+<span class="fc" id="L29">		return connect;</span>
+	}
+}
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.7.201606060606</span></div></body></html>

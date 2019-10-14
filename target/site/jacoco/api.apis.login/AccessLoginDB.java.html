@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AccessLoginDB.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Spring MVC Example</a> &gt; <a href="index.source.html" class="el_package">api.apis.login</a> &gt; <span class="el_source">AccessLoginDB.java</span></div><h1>AccessLoginDB.java</h1><pre class="source lang-java linenums">package api.apis.login;
+
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.LinkedList;
+
+import com.journaldev.spring.dbconnection.DBConnection;
+import com.journaldev.spring.model.BookModel;
+
+<span class="nc" id="L12">public class AccessLoginDB {</span>
+
+<span class="nc" id="L14">	DBConnection dbConnection = new DBConnection(); // Class to set up connection with mysql database</span>
+<span class="nc" id="L15">	private Connection connect = null;</span>
+<span class="nc" id="L16">	private Statement statement = null;</span>
+<span class="nc" id="L17">	private ResultSet resultSet = null;</span>
+
+<span class="nc" id="L19">	final private String database = &quot;bookapp&quot;;</span>
+
+	public String readLogin(LoginBean loginBean) {
+		try {
+
+<span class="nc" id="L24">			connect = dbConnection.connectToDB();</span>
+
+<span class="nc" id="L26">			System.out.println(&quot;CHECK POINT 1&quot;);</span>
+
+<span class="nc" id="L28">			String userName = loginBean.getUsername(); // Keeping user entered values in temporary variables.</span>
+<span class="nc" id="L29">			String password = loginBean.getPassword();</span>
+
+<span class="nc" id="L31">			statement = connect.createStatement();</span>
+
+<span class="nc" id="L33">			System.out.println(&quot;CHECK POINT 2&quot;);</span>
+
+<span class="nc" id="L35">			resultSet = statement.executeQuery(&quot;select * from &quot; + database + &quot;.user&quot;);</span>
+
+<span class="nc" id="L37">			System.out.println(&quot;CHECK POINT 3&quot;);</span>
+
+<span class="nc bnc" id="L39" title="All 2 branches missed.">			while (resultSet.next()) {</span>
+<span class="nc" id="L40">				System.out.println(&quot;CHECK POINT 4&quot;);</span>
+				// int Id = resultSet.getInt(&quot;id&quot;);
+<span class="nc" id="L42">				String userNameDB = resultSet.getString(&quot;username&quot;);</span>
+<span class="nc" id="L43">				String passwordDB = resultSet.getString(&quot;password&quot;);</span>
+<span class="nc bnc" id="L44" title="All 4 branches missed.">				if (userName.equals(userNameDB) &amp;&amp; password.equals(passwordDB)) {</span>
+<span class="nc" id="L45">					return &quot;SUCCESS&quot;; //// If the user entered values are already present in the database, then</span>
+										//// SUCCESS message will be sent.
+				}
+
+<span class="nc" id="L49">				System.out.println(&quot;CHECK POINT 5&quot;);</span>
+
+<span class="nc" id="L51">			}</span>
+<span class="nc" id="L52">		} catch (Exception e) {</span>
+
+<span class="nc" id="L54">			System.out.println(&quot;Error in TRY&quot; + e);</span>
+
+<span class="nc" id="L56">		}</span>
+<span class="nc" id="L57">		return &quot;ERROR in readStudent&quot;;</span>
+	}
+
+	public int getUserType(LoginBean loginBean) {
+		try {
+
+<span class="nc" id="L63">			connect = dbConnection.connectToDB();</span>
+
+<span class="nc" id="L65">			System.out.println(&quot;CHECK POINT 1&quot;);</span>
+
+<span class="nc" id="L67">			String userName = loginBean.getUsername(); // Keeping user entered values in temporary variables.</span>
+<span class="nc" id="L68">			String password = loginBean.getPassword();</span>
+
+<span class="nc" id="L70">			statement = connect.createStatement();</span>
+
+<span class="nc" id="L72">			System.out.println(&quot;CHECK POINT 2&quot;);</span>
+
+<span class="nc" id="L74">			resultSet = statement.executeQuery(</span>
+<span class="nc" id="L75">					&quot;select usertype from &quot; + database + &quot;.user where username='&quot; + loginBean.getUsername() + &quot;'&quot;);</span>
+
+<span class="nc" id="L77">			System.out.println(&quot;CHECK POINT 3&quot;);</span>
+
+<span class="nc bnc" id="L79" title="All 2 branches missed.">			while (resultSet.next()) {</span>
+<span class="nc" id="L80">				System.out.println(&quot;CHECK POINT 4&quot;);</span>
+				// int Id = resultSet.getInt(&quot;id&quot;);
+<span class="nc" id="L82">				int userType = resultSet.getInt(&quot;usertype&quot;);</span>
+<span class="nc" id="L83">				System.out.println(&quot;CHECK POINT 5&quot;);</span>
+<span class="nc" id="L84">				return userType;</span>
+
+			}
+<span class="nc" id="L87">		} catch (Exception e) {</span>
+
+<span class="nc" id="L89">			System.out.println(&quot;Error in TRY&quot; + e);</span>
+
+<span class="nc" id="L91">		}</span>
+<span class="nc" id="L92">		return 0;</span>
+	}
+	
+//	public  ArrayList getBooks(String searchPAttern) throws Exception {
+//		ArrayList allData = new ArrayList();
+//		Statement stmt = con.createStatement();
+//
+//		ResultSet rs = stmt.executeQuery(&quot;select * from bookapp.books where bookname like '%&quot;+searchPAttern+&quot;%' or author='%&quot;+searchPAttern+&quot;%' or booktype='%&quot;+searchPAttern+&quot;%'&quot;);
+//		Integer i=0;
+//		
+//		while (rs.next()) {
+//			LinkedList&lt;BookModel&gt; allUsersList = new LinkedList&lt;BookModel&gt;();			
+//			allUsersList.add(new BookModel(
+//					rs.getInt(&quot;id&quot;), rs.getString(&quot;bookname&quot;),
+//					rs.getString(&quot;booktype&quot;), rs.getString(&quot;author&quot;)));			
+//			
+//			allData.add(rs.getString(&quot;bookname&quot;) );	
+//			
+//			
+//		}
+//		return allData;
+//	}
+	
+
+public ArrayList getBooksBasedOnID(String searchPattern) {
+<span class="nc" id="L117">		ArrayList usernames = new ArrayList();</span>
+<span class="nc" id="L118">		ArrayList allData = new ArrayList();</span>
+		try {
+
+<span class="nc" id="L121">			connect = dbConnection.connectToDB();</span>
+
+<span class="nc" id="L123">			System.out.println(&quot;CHECK POINT 1&quot;);</span>
+
+<span class="nc" id="L125">			statement = connect.createStatement();</span>
+
+<span class="nc" id="L127">			System.out.println(&quot;CHECK POINT 2&quot;);</span>
+
+<span class="nc bnc" id="L129" title="All 2 branches missed.">			if (searchPattern != null) {</span>
+<span class="nc" id="L130">				System.out.println(&quot;CHECK POINT 3&quot;);</span>
+
+<span class="nc" id="L132">				resultSet = statement.executeQuery(&quot;select * from bookapp.books where bookname like '%&quot;+searchPattern+&quot;%' or author='%&quot;+searchPattern+&quot;%' or booktype='%&quot;+searchPattern+&quot;%'&quot;);</span>
+<span class="nc bnc" id="L133" title="All 2 branches missed.">				while (resultSet.next()) {</span>
+<span class="nc" id="L134">			LinkedList&lt;BookModel&gt; allUsersList = new LinkedList&lt;BookModel&gt;();			</span>
+<span class="nc" id="L135">			allUsersList.add(new BookModel(</span>
+<span class="nc" id="L136">					resultSet.getInt(&quot;id&quot;), resultSet.getString(&quot;bookname&quot;),</span>
+<span class="nc" id="L137">					resultSet.getString(&quot;booktype&quot;), resultSet.getString(&quot;author&quot;)));			</span>
+			
+<span class="nc" id="L139">			allData.add(resultSet.getString(&quot;bookname&quot;) );	</span>
+			
+			
+<span class="nc" id="L142">		}</span>
+			} else {
+<span class="nc" id="L144">				System.out.println(&quot;CHECK POINT 3&quot;);</span>
+
+<span class="nc" id="L146">				resultSet = statement.executeQuery(</span>
+						&quot;select * from bookapp.books&quot;);
+
+<span class="nc bnc" id="L149" title="All 2 branches missed.">				while (resultSet.next()) {</span>
+<span class="nc" id="L150">			LinkedList&lt;BookModel&gt; allUsersList = new LinkedList&lt;BookModel&gt;();			</span>
+<span class="nc" id="L151">			allUsersList.add(new BookModel(</span>
+<span class="nc" id="L152">					resultSet.getInt(&quot;id&quot;), resultSet.getString(&quot;bookname&quot;),</span>
+<span class="nc" id="L153">					resultSet.getString(&quot;booktype&quot;), resultSet.getString(&quot;author&quot;)));			</span>
+			
+<span class="nc" id="L155">			allData.add(resultSet.getString(&quot;bookname&quot;) );	</span>
+			
+			
+<span class="nc" id="L158">		}</span>
+			}
+
+<span class="nc" id="L161">			return allData;</span>
+<span class="nc" id="L162">		} catch (Exception e) {</span>
+
+<span class="nc" id="L164">			System.out.println(&quot;Error in TRY&quot; + e);</span>
+
+		}
+<span class="nc" id="L167">		return allData;</span>
+	}
+
+
+	public ArrayList getUsersBasedOnUserType(int usertype) {
+<span class="nc" id="L172">		ArrayList usernames = new ArrayList();</span>
+		try {
+
+<span class="nc" id="L175">			connect = dbConnection.connectToDB();</span>
+
+<span class="nc" id="L177">			System.out.println(&quot;CHECK POINT 1&quot;);</span>
+
+<span class="nc" id="L179">			statement = connect.createStatement();</span>
+
+<span class="nc" id="L181">			System.out.println(&quot;CHECK POINT 2&quot;);</span>
+
+<span class="nc bnc" id="L183" title="All 2 branches missed.">			if (usertype != 0) {</span>
+<span class="nc" id="L184">				System.out.println(&quot;CHECK POINT 3&quot;);</span>
+
+<span class="nc" id="L186">				resultSet = statement.executeQuery(&quot;select * from &quot; + database + &quot;.user where usertype=&quot; + usertype);</span>
+
+<span class="nc bnc" id="L188" title="All 2 branches missed.">				while (resultSet.next()) {</span>
+<span class="nc" id="L189">					System.out.println(&quot;CHECK POINT 4&quot;);</span>
+					// int Id = resultSet.getInt(&quot;id&quot;);
+<span class="nc" id="L191">					String userName = resultSet.getString(&quot;username&quot;);</span>
+<span class="nc" id="L192">					usernames.add(userName);</span>
+
+<span class="nc" id="L194">				}</span>
+			} else {
+<span class="nc" id="L196">				System.out.println(&quot;CHECK POINT 3&quot;);</span>
+
+<span class="nc" id="L198">				resultSet = statement.executeQuery(</span>
+						&quot;select user.username, usertype.usertypename from user,usertype where user.usertype=usertype.usertypeid&quot;);
+
+<span class="nc bnc" id="L201" title="All 2 branches missed.">				while (resultSet.next()) {</span>
+<span class="nc" id="L202">					System.out.println(&quot;CHECK POINT 4&quot;);</span>
+					// int Id = resultSet.getInt(&quot;id&quot;);
+<span class="nc" id="L204">					String userName = resultSet.getString(&quot;user.username&quot;);</span>
+<span class="nc" id="L205">					String userTypeName = resultSet.getString(&quot;usertype.usertypename&quot;);</span>
+<span class="nc" id="L206">					usernames.add(userName + &quot;:&quot; + userTypeName);</span>
+
+<span class="nc" id="L208">				}</span>
+			}
+
+<span class="nc" id="L211">			return usernames;</span>
+<span class="nc" id="L212">		} catch (Exception e) {</span>
+
+<span class="nc" id="L214">			System.out.println(&quot;Error in TRY&quot; + e);</span>
+
+		}
+<span class="nc" id="L217">		return usernames;</span>
+	}
+
+	public void close() {
+		try {
+<span class="nc bnc" id="L222" title="All 2 branches missed.">			if (resultSet != null) {</span>
+<span class="nc" id="L223">				resultSet.close();</span>
+			}
+
+<span class="nc bnc" id="L226" title="All 2 branches missed.">			if (statement != null) {</span>
+<span class="nc" id="L227">				statement.close();</span>
+			}
+
+<span class="nc bnc" id="L230" title="All 2 branches missed.">			if (connect != null) {</span>
+<span class="nc" id="L231">				connect.close();</span>
+			}
+<span class="nc" id="L233">		} catch (Exception e) {</span>
+
+<span class="nc" id="L235">		}</span>
+<span class="nc" id="L236">	}</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.7.201606060606</span></div></body></html>

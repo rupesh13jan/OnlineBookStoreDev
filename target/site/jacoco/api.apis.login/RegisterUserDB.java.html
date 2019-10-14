@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>RegisterUserDB.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Spring MVC Example</a> &gt; <a href="index.source.html" class="el_package">api.apis.login</a> &gt; <span class="el_source">RegisterUserDB.java</span></div><h1>RegisterUserDB.java</h1><pre class="source lang-java linenums">package api.apis.login;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+
+import com.journaldev.spring.dbconnection.DBConnection;
+
+<span class="nc" id="L9">public class RegisterUserDB {</span>
+
+<span class="nc" id="L11">	DBConnection dbConnection = new DBConnection();</span>
+
+	public String registerUser(RegisterBean registerBean) {
+<span class="nc" id="L14">		String firstName = registerBean.getFirstName();</span>
+<span class="nc" id="L15">		String lastName = registerBean.getLastName();</span>
+<span class="nc" id="L16">		String userName = registerBean.getUserName();</span>
+<span class="nc" id="L17">		String password = registerBean.getPassword();</span>
+<span class="nc" id="L18">		String address = registerBean.getAddress();</span>
+<span class="nc" id="L19">		String email = registerBean.getEmail();</span>
+<span class="nc" id="L20">		String contact = registerBean.getContact();</span>
+<span class="nc" id="L21">		Connection con = null;</span>
+<span class="nc" id="L22">		PreparedStatement preparedStatement = null;</span>
+		try {
+<span class="nc" id="L24">			con = dbConnection.connectToDB();</span>
+<span class="nc" id="L25">			String query = &quot;insert into bookapp.user(username,firstname,lastname,email,password,address,contact,usertype) values (?,?,?,?,?,?,?,1)&quot;; // Insert</span>
+<span class="nc" id="L26">			preparedStatement = con.prepareStatement(query); // Making use of prepared statements here to insert bunch</span>
+																// of data
+
+<span class="nc" id="L29">			preparedStatement.setString(1, userName);</span>
+<span class="nc" id="L30">			preparedStatement.setString(2, firstName);</span>
+<span class="nc" id="L31">			preparedStatement.setString(3, lastName);</span>
+<span class="nc" id="L32">			preparedStatement.setString(4, email);</span>
+<span class="nc" id="L33">			preparedStatement.setString(5, password);</span>
+<span class="nc" id="L34">			preparedStatement.setString(6, address);</span>
+<span class="nc" id="L35">			preparedStatement.setString(7, contact);</span>
+<span class="nc" id="L36">			int i = preparedStatement.executeUpdate();</span>
+<span class="nc bnc" id="L37" title="All 2 branches missed.">			if (i != 0) // Just to ensure data has been inserted into the database</span>
+<span class="nc" id="L38">				return &quot;SUCCESS&quot;;</span>
+<span class="nc" id="L39">		} catch (SQLException e) {</span>
+<span class="nc" id="L40">			e.printStackTrace();</span>
+<span class="nc" id="L41">		}</span>
+<span class="nc" id="L42">		return &quot;Oops.. Something went wrong there..!&quot;; // On failure, send a message from here.</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.7.201606060606</span></div></body></html>

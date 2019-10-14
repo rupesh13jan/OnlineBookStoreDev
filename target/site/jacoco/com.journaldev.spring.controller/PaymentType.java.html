@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PaymentType.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Spring MVC Example</a> &gt; <a href="index.source.html" class="el_package">com.journaldev.spring.controller</a> &gt; <span class="el_source">PaymentType.java</span></div><h1>PaymentType.java</h1><pre class="source lang-java linenums">package com.journaldev.spring.controller;
+
+import java.io.Serializable;
+
+import org.springframework.stereotype.Service;
+@Service
+public class PaymentType implements Serializable {
+	private int user_id;
+	private int book_id;
+	private int paymentid;
+	private String paymenttype;
+	private int otp;
+
+	public PaymentType(int user_id, int book_id, int paymentid, String paymenttype, int otp) {
+<span class="nc" id="L15">		super();</span>
+<span class="nc" id="L16">		this.user_id = user_id;</span>
+<span class="nc" id="L17">		this.book_id = book_id;</span>
+<span class="nc" id="L18">		this.paymentid = paymentid;</span>
+<span class="nc" id="L19">		this.paymenttype = paymenttype;</span>
+<span class="nc" id="L20">		this.otp = otp;</span>
+<span class="nc" id="L21">	}</span>
+	public int getOtp() {
+<span class="nc" id="L23">		return otp;</span>
+	}
+	public void setOtp(int otp) {
+<span class="nc" id="L26">		this.otp = otp;</span>
+<span class="nc" id="L27">	}</span>
+	public int getUser_id() {
+<span class="nc" id="L29">		return user_id;</span>
+	}
+	public int getPaymentid() {
+<span class="nc" id="L32">		return paymentid;</span>
+	}
+	public void setPaymentid(int paymentid) {
+<span class="nc" id="L35">		this.paymentid = paymentid;</span>
+<span class="nc" id="L36">	}</span>
+	public void setUser_id(int user_id) {
+<span class="nc" id="L38">		this.user_id = user_id;</span>
+<span class="nc" id="L39">	}</span>
+	public int getBook_id() {
+<span class="nc" id="L41">		return book_id;</span>
+	}
+	
+	public void setBook_id(int book_id) {
+<span class="nc" id="L45">		this.book_id = book_id;</span>
+<span class="nc" id="L46">	}</span>
+	
+	
+	
+	public String getPaymenttype() {
+<span class="nc" id="L51">		return paymenttype;</span>
+	}
+	public void setPaymenttype(String paymenttype) {
+<span class="nc" id="L54">		this.paymenttype = paymenttype;</span>
+<span class="nc" id="L55">	}</span>
+<span class="nc" id="L56">	public PaymentType() {</span>
+		
+<span class="nc" id="L58">	}</span>
+	
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.7.201606060606</span></div></body></html>

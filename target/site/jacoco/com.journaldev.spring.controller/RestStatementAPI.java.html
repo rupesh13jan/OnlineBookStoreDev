@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>RestStatementAPI.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Spring MVC Example</a> &gt; <a href="index.source.html" class="el_package">com.journaldev.spring.controller</a> &gt; <span class="el_source">RestStatementAPI.java</span></div><h1>RestStatementAPI.java</h1><pre class="source lang-java linenums">package com.journaldev.spring.controller;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.journaldev.spring.model.BookModel;
+
+<span class="fc" id="L16">public class RestStatementAPI {</span>
+
+	public Map&lt;Integer, LinkedList&lt;Users&gt;&gt; getUsersDetails(Connection con) throws Exception {
+<span class="nc" id="L19">		Map&lt;Integer, LinkedList&lt;Users&gt;&gt; allData = new LinkedHashMap&lt;Integer, LinkedList&lt;Users&gt;&gt;();</span>
+<span class="nc" id="L20">		Statement stmt = con.createStatement();</span>
+<span class="nc" id="L21">		ResultSet rs = stmt.executeQuery(&quot;select * from bookapp.user&quot;);</span>
+<span class="nc bnc" id="L22" title="All 2 branches missed.">		while (rs.next()) {</span>
+<span class="nc" id="L23">			LinkedList&lt;Users&gt; allUsersList = new LinkedList&lt;Users&gt;();</span>
+<span class="nc" id="L24">			allUsersList.add(new Users(rs.getString(&quot;username&quot;), rs.getString(&quot;password&quot;), rs.getString(&quot;firstname&quot;),</span>
+<span class="nc" id="L25">					rs.getString(&quot;lastname&quot;), rs.getString(&quot;contact&quot;), rs.getString(&quot;address&quot;), rs.getString(&quot;email&quot;),</span>
+<span class="nc" id="L26">					rs.getInt(&quot;user_id&quot;), rs.getInt(&quot;usertype&quot;)));</span>
+<span class="nc" id="L27">			allData.put(rs.getInt(&quot;user_id&quot;), allUsersList);</span>
+<span class="nc" id="L28">		}</span>
+<span class="nc" id="L29">		return allData;</span>
+
+	}
+
+	public LinkedList getOrderDetails(Connection con,int paymentid) throws Exception {
+<span class="nc" id="L34">		Map&lt;Integer, LinkedList&lt;Users&gt;&gt; allData = new LinkedHashMap&lt;Integer, LinkedList&lt;Users&gt;&gt;();</span>
+<span class="nc" id="L35">		Statement stmt = con.createStatement();</span>
+<span class="nc" id="L36">		ResultSet rs = stmt.executeQuery(&quot;select * from bookapp.orders where paymentid=&quot;+paymentid);</span>
+<span class="nc" id="L37">		LinkedList allUsersList = new LinkedList();</span>
+<span class="nc bnc" id="L38" title="All 2 branches missed.">		while (rs.next()) {</span>
+			
+<span class="nc" id="L40">			allUsersList.add(rs.getInt(&quot;orderid&quot;));</span>
+<span class="nc" id="L41">			allUsersList.add(rs.getInt(&quot;userid&quot;));</span>
+<span class="nc" id="L42">			allUsersList.add(rs.getString(&quot;paymentstatus&quot;));</span>
+<span class="nc" id="L43">			allUsersList.add(rs.getInt(&quot;bookid&quot;));</span>
+<span class="nc" id="L44">			allUsersList.add(rs.getInt(&quot;otp&quot;));</span>
+			
+<span class="nc" id="L46">			allUsersList.add(rs.getString(&quot;orderstatus&quot;));</span>
+			
+		}
+<span class="nc" id="L49">		return allUsersList;</span>
+
+	}
+	public LinkedList&lt;BookModel&gt; getBooks(Connection con, String searchPAttern) throws Exception {
+<span class="nc" id="L53">		LinkedList&lt;BookModel&gt; allData = new LinkedList&lt;BookModel&gt;();</span>
+<span class="nc" id="L54">		Statement stmt = con.createStatement();</span>
+
+<span class="nc" id="L56">		ResultSet rs = stmt.executeQuery(&quot;select * from bookapp.books where bookname like '%&quot; + searchPAttern</span>
+				+ &quot;%' or author='%&quot; + searchPAttern + &quot;%' or booktype='%&quot; + searchPAttern + &quot;%'&quot;);
+<span class="nc" id="L58">		Integer i = 0;</span>
+
+<span class="nc bnc" id="L60" title="All 2 branches missed.">		while (rs.next()) {</span>
+<span class="nc" id="L61">			LinkedList&lt;BookModel&gt; allUsersList = new LinkedList&lt;BookModel&gt;();</span>
+<span class="nc" id="L62">			allUsersList.add(new BookModel(rs.getInt(&quot;id&quot;), rs.getString(&quot;bookname&quot;), rs.getString(&quot;booktype&quot;),</span>
+<span class="nc" id="L63">					rs.getString(&quot;author&quot;)));</span>
+
+<span class="nc" id="L65">			allData.addAll(allUsersList);</span>
+<span class="nc" id="L66">		}</span>
+<span class="nc" id="L67">		return allData;</span>
+	}
+
+	public int getOrderID(Connection con, Order orderjson, AfterOrder afterorder) throws Exception {
+<span class="nc" id="L71">		PreparedStatement preparedStatement = null;</span>
+<span class="nc" id="L72">		afterorder.setPaymentID(getRandomNumber());</span>
+<span class="nc" id="L73">		String query = &quot;insert into bookapp.orders(userid,paymentstatus,bookid,orderstatus,paymentid) values (?,?,?,?,?)&quot;;</span>
+<span class="nc" id="L74">		preparedStatement = con.prepareStatement(query);</span>
+<span class="nc" id="L75">		preparedStatement.setInt(1, orderjson.getUser_id());</span>
+<span class="nc" id="L76">		preparedStatement.setString(2, &quot;NotStarted&quot;);</span>
+<span class="nc" id="L77">		preparedStatement.setInt(3, orderjson.getBook_id());</span>
+<span class="nc" id="L78">		preparedStatement.setString(4, &quot;Created&quot;);</span>
+<span class="nc" id="L79">		preparedStatement.setInt(5, afterorder.getPaymentID());</span>
+<span class="nc" id="L80">		int i = preparedStatement.executeUpdate();</span>
+<span class="nc" id="L81">		return i;</span>
+	}
+
+	public int getOrderIDUI(Connection con, OrderUI orderjson, AfterOrder afterorder) throws Exception {
+<span class="nc" id="L85">		PreparedStatement preparedStatement = null;</span>
+<span class="nc" id="L86">		afterorder.setPaymentID(getRandomNumber());</span>
+<span class="nc" id="L87">		String query = &quot;insert into bookapp.orders(userid,paymentstatus,bookid,orderstatus,paymentid) values (?,?,?,?,?)&quot;;</span>
+<span class="nc" id="L88">		preparedStatement = con.prepareStatement(query);</span>
+<span class="nc" id="L89">		preparedStatement.setInt(1, orderjson.getUser_id());</span>
+<span class="nc" id="L90">		preparedStatement.setString(2, &quot;NotStarted&quot;);</span>
+<span class="nc" id="L91">		preparedStatement.setInt(3, orderjson.getBook_id());</span>
+<span class="nc" id="L92">		preparedStatement.setString(4, &quot;Created&quot;);</span>
+<span class="nc" id="L93">		preparedStatement.setInt(5, afterorder.getPaymentID());</span>
+<span class="nc" id="L94">		int i = preparedStatement.executeUpdate();</span>
+<span class="nc" id="L95">		return afterorder.getPaymentID();</span>
+	}
+
+	public static int getRandomNumber() {
+<span class="nc" id="L99">		int x = (int) (Math.random() * ((1000 - 1) + 1)) + 1;</span>
+<span class="nc" id="L100">		return x;</span>
+	}
+
+	public int changeStatusOfPayment(Connection con, Payment paymentjson) throws Exception {
+<span class="nc" id="L104">		PreparedStatement preparedStatement = null;</span>
+<span class="nc" id="L105">		int otp = getOTP();</span>
+<span class="nc" id="L106">		String query = &quot;update orders set paymentstatus=\&quot;Pending\&quot;,orderstatus=\&quot;Pending\&quot;,otp=\&quot;&quot; + otp</span>
+<span class="nc" id="L107">				+ &quot;\&quot; where paymentid='&quot; + paymentjson.getPaymentid() + &quot;' and paymentstatus='NotStarted' and userid='&quot;</span>
+<span class="nc" id="L108">				+ paymentjson.getUser_id() + &quot;' and bookid='&quot; + paymentjson.getBook_id() + &quot;'&quot;;</span>
+<span class="nc" id="L109">		preparedStatement = con.prepareStatement(query);</span>
+<span class="nc" id="L110">		int i = preparedStatement.executeUpdate();</span>
+<span class="nc" id="L111">		System.out.println(i);</span>
+<span class="nc bnc" id="L112" title="All 2 branches missed.">		if (i == 1) {</span>
+<span class="nc" id="L113">			return otp;</span>
+		} else {
+<span class="nc" id="L115">			return otp;</span>
+		}
+
+	}
+
+	public int changeStatusOfPaymentUI(Connection con, int user_id, int paymentid) throws Exception {
+<span class="nc" id="L121">		PreparedStatement preparedStatement = null;</span>
+<span class="nc" id="L122">		int otp = getOTP();</span>
+<span class="nc" id="L123">		String query = &quot;update orders set paymentstatus=\&quot;Pending\&quot;,orderstatus=\&quot;Pending\&quot;,otp=\&quot;&quot; + otp</span>
+				+ &quot;\&quot; where paymentid='&quot; + paymentid + &quot;' and paymentstatus='NotStarted' and userid='&quot; + user_id + &quot;'&quot;;
+<span class="nc" id="L125">		preparedStatement = con.prepareStatement(query);</span>
+<span class="nc" id="L126">		int i = preparedStatement.executeUpdate();</span>
+<span class="nc" id="L127">		System.out.println(i);</span>
+<span class="nc bnc" id="L128" title="All 2 branches missed.">		if (i == 1) {</span>
+<span class="nc" id="L129">			return otp;</span>
+		} else {
+<span class="nc" id="L131">			return otp;</span>
+		}
+
+	}
+
+	public static int getOTP() {
+<span class="nc" id="L137">		int x = (int) (Math.random() * ((10000 - 1) + 1)) + 1;</span>
+<span class="nc" id="L138">		return x;</span>
+	}
+
+	
+	public int changeStatusOfPaymenttypeUI(Connection con, int user_id, int paymentid, int otp) throws Exception {
+<span class="nc" id="L143">		PreparedStatement preparedStatement = null;</span>
+<span class="nc" id="L144">		String query = &quot;update orders set paymentstatus=\&quot;Completed\&quot;, orderstatus=\&quot;Completed\&quot;, &quot; + &quot;paymenttype=\&quot;&quot;</span>
+				+&quot;NetBanking&quot;
+				+ &quot;\&quot;  where otp='&quot; + otp + &quot;' and paymentid='&quot; + paymentid
+				+ &quot;' and paymentstatus='Pending' and userid='&quot; + user_id + &quot;'&quot;;
+<span class="nc" id="L148">		preparedStatement = con.prepareStatement(query);</span>
+<span class="nc" id="L149">		int i = preparedStatement.executeUpdate();</span>
+<span class="nc" id="L150">		System.out.println(i);</span>
+<span class="nc" id="L151">		return i;</span>
+
+	}
+
+	public int changeStatusOfPaymenttype(Connection con, PaymentType paymenttypejson) throws Exception {
+<span class="nc" id="L156">		PreparedStatement preparedStatement = null;</span>
+<span class="nc" id="L157">		String query = &quot;update orders set paymentstatus=\&quot;Completed\&quot;, orderstatus=\&quot;Completed\&quot;, paymenttype=\&quot;&quot;</span>
+<span class="nc" id="L158">				+ paymenttypejson.getPaymenttype() + &quot;\&quot;  where otp='&quot; + paymenttypejson.getOtp() + &quot;' and paymentid='&quot;</span>
+<span class="nc" id="L159">				+ paymenttypejson.getPaymentid() + &quot;' and paymentstatus='Pending' and userid='&quot;</span>
+<span class="nc" id="L160">				+ paymenttypejson.getUser_id() + &quot;' and bookid='&quot; + paymenttypejson.getBook_id() + &quot;'&quot;;</span>
+<span class="nc" id="L161">		preparedStatement = con.prepareStatement(query);</span>
+<span class="nc" id="L162">		int i = preparedStatement.executeUpdate();</span>
+<span class="nc" id="L163">		System.out.println(i);</span>
+<span class="nc" id="L164">		return i;</span>
+
+	}
+
+	public Map&lt;Integer, LinkedList&lt;Users&gt;&gt; displayUsersBasedOnID(Connection con, int id) throws Exception {
+<span class="nc" id="L169">		Map&lt;Integer, LinkedList&lt;Users&gt;&gt; allData = new LinkedHashMap&lt;Integer, LinkedList&lt;Users&gt;&gt;();</span>
+<span class="nc" id="L170">		Statement stmt = con.createStatement();</span>
+<span class="nc" id="L171">		ResultSet rs = stmt.executeQuery(&quot;select * from bookapp.user where usertype=&quot; + id);</span>
+<span class="nc bnc" id="L172" title="All 2 branches missed.">		while (rs.next()) {</span>
+<span class="nc" id="L173">			LinkedList&lt;Users&gt; allUsersList = new LinkedList&lt;Users&gt;();</span>
+<span class="nc" id="L174">			allUsersList.add(new Users(rs.getString(&quot;username&quot;), rs.getString(&quot;password&quot;), rs.getString(&quot;firstname&quot;),</span>
+<span class="nc" id="L175">					rs.getString(&quot;lastname&quot;), rs.getString(&quot;contact&quot;), rs.getString(&quot;address&quot;), rs.getString(&quot;email&quot;),</span>
+<span class="nc" id="L176">					rs.getInt(&quot;user_id&quot;), rs.getInt(&quot;usertype&quot;)));</span>
+<span class="nc" id="L177">			allData.put(rs.getInt(&quot;user_id&quot;), allUsersList);</span>
+<span class="nc" id="L178">		}</span>
+<span class="nc" id="L179">		return allData;</span>
+	}
+
+	public boolean displayUsersBasedOnUsernameAndPassword(Connection con, String username,String password) throws Exception {
+		//Map&lt;Integer, LinkedList&lt;Users&gt;&gt; allData = new LinkedHashMap&lt;Integer, LinkedList&lt;Users&gt;&gt;();
+<span class="nc" id="L184">		Statement stmt = con.createStatement();</span>
+<span class="nc" id="L185">		System.out.println(&quot;select * from bookapp.user where username like '&quot; + username+ &quot;' and password like '&quot;+password+&quot;'&quot;);</span>
+<span class="nc" id="L186">		ResultSet rs = stmt.executeQuery(&quot;select * from bookapp.user where username like '&quot; + username+ &quot;' and password like '&quot;+password+&quot;'&quot;);</span>
+		
+//		String val=rs.getString(&quot;username&quot;);
+//		System.out.println(val);
+		
+<span class="nc" id="L191">		return rs.next();</span>
+	}
+	public int displayPaymentId(Connection con, String id) throws Exception {
+<span class="nc" id="L194">		Map&lt;Integer, LinkedList&lt;Users&gt;&gt; allData = new LinkedHashMap&lt;Integer, LinkedList&lt;Users&gt;&gt;();</span>
+<span class="nc" id="L195">		Statement stmt = con.createStatement();</span>
+<span class="nc" id="L196">		System.out.println(&quot;username:&quot; + id);</span>
+<span class="nc" id="L197">		System.out.println(&quot;select * from bookapp.user where username like '&quot; + id + &quot;'&quot;);</span>
+<span class="nc" id="L198">		ResultSet rs = stmt.executeQuery(&quot;select * from bookapp.user where username like 'ram'&quot;);</span>
+<span class="nc" id="L199">		int paymentid = 0;</span>
+<span class="nc bnc" id="L200" title="All 2 branches missed.">		while (rs.next()) {</span>
+
+<span class="nc" id="L202">			paymentid = rs.getInt(&quot;paymentid&quot;);</span>
+
+		}
+
+<span class="nc" id="L206">		return paymentid;</span>
+	}
+
+	public Map&lt;Integer, LinkedList&lt;Users&gt;&gt; displayUsersBasedOnName(Connection con, String id) throws Exception {
+<span class="nc" id="L210">		Map&lt;Integer, LinkedList&lt;Users&gt;&gt; allData = new LinkedHashMap&lt;Integer, LinkedList&lt;Users&gt;&gt;();</span>
+<span class="nc" id="L211">		Statement stmt = con.createStatement();</span>
+<span class="nc" id="L212">		System.out.println(&quot;username:&quot; + id);</span>
+<span class="nc" id="L213">		System.out.println(&quot;select * from bookapp.user where username like '&quot; + id + &quot;'&quot;);</span>
+<span class="nc" id="L214">		ResultSet rs = stmt.executeQuery(&quot;select * from bookapp.user where username like 'ram'&quot;);</span>
+<span class="nc bnc" id="L215" title="All 2 branches missed.">		while (rs.next()) {</span>
+<span class="nc" id="L216">			LinkedList&lt;Users&gt; allUsersList = new LinkedList&lt;Users&gt;();</span>
+<span class="nc" id="L217">			allUsersList.add(new Users(rs.getString(&quot;username&quot;), rs.getString(&quot;password&quot;), rs.getString(&quot;firstname&quot;),</span>
+<span class="nc" id="L218">					rs.getString(&quot;lastname&quot;), rs.getString(&quot;contact&quot;), rs.getString(&quot;address&quot;), rs.getString(&quot;email&quot;),</span>
+<span class="nc" id="L219">					rs.getInt(&quot;user_id&quot;), rs.getInt(&quot;usertype&quot;)));</span>
+<span class="nc" id="L220">			allData.put(rs.getInt(&quot;user_id&quot;), allUsersList);</span>
+<span class="nc" id="L221">		}</span>
+
+<span class="nc" id="L223">		return allData;</span>
+	}
+
+	public int insertUsers(Connection con, Users usersjson) throws Exception {
+<span class="nc" id="L227">		PreparedStatement preparedStatement = null;</span>
+<span class="nc" id="L228">		String query = &quot;insert into bookapp.user(username,firstname,lastname,email,password,address,contact,usertype) values (?,?,?,?,?,?,?,1)&quot;; // Insert</span>
+																																					// user
+																																					// details
+																																					// into
+																																					// the
+																																					// table
+																																					// 'USERS'
+<span class="nc" id="L235">		preparedStatement = con.prepareStatement(query); // Making use of prepared statements here to insert bunch of</span>
+															// data
+<span class="nc" id="L237">		preparedStatement.setString(1, usersjson.getUsername());</span>
+<span class="nc" id="L238">		preparedStatement.setString(2, usersjson.getFirstname());</span>
+<span class="nc" id="L239">		preparedStatement.setString(3, usersjson.getLastname());</span>
+<span class="nc" id="L240">		preparedStatement.setString(4, usersjson.getEmail());</span>
+<span class="nc" id="L241">		preparedStatement.setString(5, usersjson.getPassword());</span>
+<span class="nc" id="L242">		preparedStatement.setString(6, usersjson.getAddress());</span>
+<span class="nc" id="L243">		preparedStatement.setString(7, usersjson.getContact());</span>
+<span class="nc" id="L244">		int i = preparedStatement.executeUpdate();</span>
+<span class="nc" id="L245">		System.out.println(i);</span>
+
+<span class="nc" id="L247">		return i;</span>
+	}
+
+	public int updateUsers(Connection con, Users usersjson, String email) throws Exception {
+<span class="nc" id="L251">		PreparedStatement preparedStatement = null;</span>
+<span class="nc" id="L252">		String query = &quot;update user set usertype=&quot; + usersjson.getUsertype() + &quot; where email='&quot; + email + &quot;'&quot;; // Insert</span>
+																												// user
+																												// details
+																												// into
+																												// the
+																												// table
+																												// 'USERS'
+<span class="nc" id="L259">		preparedStatement = con.prepareStatement(query); // Making use of prepared statements here to insert bunch of</span>
+															// data
+<span class="nc" id="L261">		int i = preparedStatement.executeUpdate();</span>
+<span class="nc" id="L262">		System.out.println(i);</span>
+
+<span class="nc" id="L264">		return i;</span>
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.7.201606060606</span></div></body></html>

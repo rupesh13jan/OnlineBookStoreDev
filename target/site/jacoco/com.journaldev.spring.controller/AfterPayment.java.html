@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AfterPayment.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Spring MVC Example</a> &gt; <a href="index.source.html" class="el_package">com.journaldev.spring.controller</a> &gt; <span class="el_source">AfterPayment.java</span></div><h1>AfterPayment.java</h1><pre class="source lang-java linenums">package com.journaldev.spring.controller;
+
+import java.io.Serializable;
+
+import org.springframework.stereotype.Service;
+
+@Service
+public class AfterPayment {
+
+	private String paymentstatus;
+	private String paymenttype;
+	private int otp;
+
+	public AfterPayment(String paymentstatus, String paymenttype, int otp) {
+<span class="nc" id="L15">		super();</span>
+<span class="nc" id="L16">		this.paymentstatus = paymentstatus;</span>
+<span class="nc" id="L17">		this.paymenttype = paymenttype;</span>
+<span class="nc" id="L18">		this.otp = otp;</span>
+<span class="nc" id="L19">	}</span>
+
+	public AfterPayment(String paymentstatus, String paymenttype) {
+<span class="nc" id="L22">		super();</span>
+<span class="nc" id="L23">		this.paymentstatus = paymentstatus;</span>
+<span class="nc" id="L24">		this.paymenttype = paymenttype;</span>
+		
+<span class="nc" id="L26">	}</span>
+	public String getPaymentstatus() {
+<span class="nc" id="L28">		return paymentstatus;</span>
+	}
+
+	public void setPaymentstatus(String paymentstatus) {
+<span class="nc" id="L32">		this.paymentstatus = paymentstatus;</span>
+<span class="nc" id="L33">	}</span>
+
+	public String getPaymenttype() {
+<span class="nc" id="L36">		return paymenttype;</span>
+	}
+
+	public void setPaymenttype(String paymenttype) {
+<span class="nc" id="L40">		this.paymenttype = paymenttype;</span>
+<span class="nc" id="L41">	}</span>
+
+	public int getOtp() {
+<span class="nc" id="L44">		return otp;</span>
+	}
+
+	public void setOtp(int otp) {
+<span class="nc" id="L48">		this.otp = otp;</span>
+<span class="nc" id="L49">	}</span>
+
+<span class="nc" id="L51">	public AfterPayment() {</span>
+
+<span class="nc" id="L53">	}</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.7.201606060606</span></div></body></html>

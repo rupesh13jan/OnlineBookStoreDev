@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Implementation-Title: Spring MVC Example
+Implementation-Version: 0.0.1-SNAPSHOT
+Built-By: 516445
+Implementation-Vendor-Id: com.journaldev.spring.mvc
+Build-Jdk: 1.8.0_192
+Implementation-URL: https://projects.spring.io/spring-boot/#/spring-bo
+ ot-starter-parent/spring-mvc-example
+Created-By: Maven Integration for Eclipse
+

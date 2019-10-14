@@ -1,0 +1,23 @@
+GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+Spring MVC Example,com.journaldev.spring.controller,RestApiController,460,33,20,0,113,7,20,2,10,2
+Spring MVC Example,com.journaldev.spring.controller,LoginBeanAPI,17,0,0,0,7,0,5,0,5,0
+Spring MVC Example,com.journaldev.spring.controller,Users,103,0,0,0,43,0,22,0,22,0
+Spring MVC Example,com.journaldev.spring.controller,HomeController,570,0,24,0,111,0,28,0,16,0
+Spring MVC Example,com.journaldev.spring.controller,AfterOrder,26,0,0,0,12,0,6,0,6,0
+Spring MVC Example,com.journaldev.spring.controller,OrderUI,26,0,0,0,12,0,6,0,6,0
+Spring MVC Example,com.journaldev.spring.controller,PaymentType,56,0,0,0,24,0,12,0,12,0
+Spring MVC Example,com.journaldev.spring.controller,RestStatementAPI,774,3,16,0,151,1,25,1,17,1
+Spring MVC Example,com.journaldev.spring.controller,AfterPayment,45,0,0,0,20,0,9,0,9,0
+Spring MVC Example,com.journaldev.spring.controller,MessageBean,17,0,0,0,7,0,5,0,5,0
+Spring MVC Example,com.journaldev.spring.controller,Payment,36,0,0,0,16,0,8,0,8,0
+Spring MVC Example,com.journaldev.spring.controller,Order,26,0,0,0,12,0,6,0,6,0
+Spring MVC Example,api.apis.login,RegisterBean,61,0,0,0,26,0,18,0,18,0
+Spring MVC Example,api.apis.login,AccessLoginDB,451,0,26,0,107,0,19,0,6,0
+Spring MVC Example,api.apis.login,LoginBean,17,0,0,0,7,0,5,0,5,0
+Spring MVC Example,api.apis.login,RegisterUserDB,84,0,2,0,28,0,3,0,2,0
+Spring MVC Example,com.journaldev.spring.dbconnection,DBConnection,10,35,0,0,3,10,0,2,0,2
+Spring MVC Example,com.journaldev.spring.dbconnection,MySQLAccess,133,0,2,0,34,0,4,0,3,0
+Spring MVC Example,com.journaldev.spring.model,FormBean,10,0,0,0,4,0,3,0,3,0
+Spring MVC Example,com.journaldev.spring.model,User,10,0,0,0,4,0,3,0,3,0
+Spring MVC Example,com.journaldev.spring.model,LoginUser,17,0,0,0,7,0,5,0,5,0
+Spring MVC Example,com.journaldev.spring.model,BookModel,46,0,0,0,20,0,10,0,10,0

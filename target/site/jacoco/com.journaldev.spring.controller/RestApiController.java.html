@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>RestApiController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Spring MVC Example</a> &gt; <a href="index.source.html" class="el_package">com.journaldev.spring.controller</a> &gt; <span class="el_source">RestApiController.java</span></div><h1>RestApiController.java</h1><pre class="source lang-java linenums">package com.journaldev.spring.controller;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.Locale;
+import java.util.Map;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
+import com.journaldev.spring.dbconnection.DBConnection;
+import com.journaldev.spring.model.BookModel;
+import com.journaldev.spring.model.User;
+
+@RestController
+<span class="fc" id="L24">public class RestApiController {</span>
+
+	@Autowired
+	private Users user;
+	@Autowired
+	private MessageBean msg;
+	@Autowired
+	private AfterOrder afterorder;
+	@Autowired
+	private AfterPayment afterpayment;
+	@Autowired
+	private LoginBeanAPI loginBeanAPI;
+<span class="fc" id="L36">	RestStatementAPI restApi = new RestStatementAPI();</span>
+	/** Get api for searching the books**/
+	@RequestMapping(value = &quot;/viewBooks/{searchPAttern}&quot;, method = RequestMethod.GET, produces = &quot;application/json&quot;)
+	@ResponseBody	
+	public  LinkedList&lt;BookModel&gt;  searchBooks(@PathVariable String searchPAttern) throws Exception {
+<span class="fc" id="L41">		System.out.println(&quot;Search Books are requested for  &quot;+ searchPAttern);</span>
+<span class="fc" id="L42">		DBConnection dbcon = new DBConnection();</span>
+<span class="fc" id="L43">		Connection con = dbcon.connectToDB();</span>
+<span class="fc" id="L44">		LinkedList&lt;BookModel&gt; allData = restApi.getBooks(con,searchPAttern);</span>
+<span class="fc" id="L45">		return allData;</span>
+	}
+	
+	
+	/** Get login api for searching the books**/
+	@RequestMapping(value = &quot;/loginapi&quot;, method = RequestMethod.POST, produces = &quot;application/json&quot;)
+	@ResponseStatus(HttpStatus.ACCEPTED)
+	@ResponseBody	
+	public  MessageBean  loginapi(@RequestBody LoginBeanAPI loginjson) throws Exception {
+<span class="nc" id="L54">		System.out.println(&quot;login requested for  &quot;);</span>
+<span class="nc" id="L55">		DBConnection dbcon = new DBConnection();</span>
+<span class="nc" id="L56">		Connection con = dbcon.connectToDB();</span>
+<span class="nc" id="L57">		boolean allData = restApi.displayUsersBasedOnUsernameAndPassword(con,loginjson.getUsername(),loginjson.getPassword());</span>
+<span class="nc bnc" id="L58" title="All 2 branches missed.">		if (allData) {</span>
+<span class="nc" id="L59">			msg.setStatus(202);</span>
+<span class="nc" id="L60">			msg.setMessage(&quot;Login successfully&quot;);</span>
+<span class="nc" id="L61">			return msg;</span>
+		} else {
+<span class="nc" id="L63">			msg.setStatus(500);</span>
+<span class="nc" id="L64">			msg.setMessage(&quot;Please provide valid user&quot;);</span>
+<span class="nc" id="L65">			return msg;</span>
+		}
+		
+	}
+	
+	
+
+	/** Get api for displaying all users **/
+	@RequestMapping(value = &quot;/displayUsers&quot;, method = RequestMethod.GET, produces = &quot;application/json&quot;)
+	@ResponseBody
+	public Map&lt;Integer, LinkedList&lt;Users&gt;&gt; getUsers() throws Exception {
+<span class="nc" id="L76">		System.out.println(&quot;display uesrs&quot;);</span>
+<span class="nc" id="L77">		DBConnection dbcon = new DBConnection();</span>
+<span class="nc" id="L78">		Connection con = dbcon.connectToDB();</span>
+<span class="nc" id="L79">		Map&lt;Integer, LinkedList&lt;Users&gt;&gt; allData = restApi.getUsersDetails(con);</span>
+<span class="nc" id="L80">		con.close();</span>
+<span class="nc" id="L81">		return allData;</span>
+	}
+
+	/**
+	 * Get api for displaying all users based on id(0-normal users,1-admin
+	 * users,2-merchants)
+	 **/
+	@RequestMapping(value = &quot;/displayViewers/{id}&quot;, method = RequestMethod.GET, produces = &quot;application/json&quot;)
+	@ResponseBody
+	public Map&lt;Integer, LinkedList&lt;Users&gt;&gt; getUsersBasedOnID(@PathVariable int id) throws Exception {
+
+<span class="nc" id="L92">		System.out.println(&quot;display users based on id&quot;);</span>
+<span class="nc" id="L93">		DBConnection dbcon = new DBConnection();</span>
+<span class="nc" id="L94">		Connection con = dbcon.connectToDB();</span>
+<span class="nc" id="L95">		Map&lt;Integer, LinkedList&lt;Users&gt;&gt; allData = restApi.displayUsersBasedOnID(con, id);</span>
+<span class="nc" id="L96">		con.close();</span>
+<span class="nc" id="L97">		return allData;</span>
+	}
+	
+	
+	@RequestMapping(value = &quot;/displayViewer/{name}&quot;, method = RequestMethod.GET, produces = &quot;application/json&quot;)
+	@ResponseBody
+	public Map&lt;Integer, LinkedList&lt;Users&gt;&gt; getUsersBasedOnName(@PathVariable String name) throws Exception {
+
+<span class="nc" id="L105">		System.out.println(&quot;display users based on id&quot;);</span>
+<span class="nc" id="L106">		DBConnection dbcon = new DBConnection();</span>
+<span class="nc" id="L107">		Connection con = dbcon.connectToDB();</span>
+<span class="nc" id="L108">		Map&lt;Integer, LinkedList&lt;Users&gt;&gt; allData = restApi.displayUsersBasedOnName(con, name);</span>
+<span class="nc" id="L109">		con.close();</span>
+<span class="nc" id="L110">		return allData;</span>
+	}
+	
+	
+	/**1... Post api for creating order id **/
+	/***1.It will create the order id and generate one payment id and payment status will be &quot;not started&quot;****/
+	@RequestMapping(method = RequestMethod.POST, value = &quot;/addToCart&quot;, headers = { &quot;content-type=application/json&quot; })
+	@ResponseStatus(HttpStatus.ACCEPTED)
+	@ResponseBody	
+	public Map&lt;String,LinkedList&lt;AfterOrder&gt;&gt; addToCart(@RequestBody Order orderjson) throws Exception {
+<span class="nc" id="L120">		System.out.println(&quot;1st API...order id creation&quot;);</span>
+<span class="nc" id="L121">		Map&lt;String,LinkedList&lt;AfterOrder&gt;&gt;  allData=new LinkedHashMap&lt;String,LinkedList&lt;AfterOrder&gt;&gt;();</span>
+<span class="nc" id="L122">		DBConnection dbcon = new DBConnection();</span>
+<span class="nc" id="L123">		Connection con = dbcon.connectToDB();</span>
+<span class="nc" id="L124">		int val=restApi.getOrderID(con,orderjson,afterorder);</span>
+<span class="nc bnc" id="L125" title="All 2 branches missed.">		if (val == 1) {</span>
+		
+<span class="nc" id="L127">			afterorder.setPaymentStatus(&quot;NotStarted&quot;);</span>
+			
+<span class="nc" id="L129">			LinkedList&lt;AfterOrder&gt; allUsersList = new LinkedList&lt;AfterOrder&gt;();</span>
+<span class="nc" id="L130">			allUsersList.add(new AfterOrder(afterorder.getPaymentID(), afterorder.getPaymentStatus()));</span>
+<span class="nc" id="L131">			allData.put(&quot;OrderID&quot;, allUsersList);</span>
+			
+<span class="nc" id="L133">		}else {</span>
+<span class="nc" id="L134">			afterorder.setPaymentID(0);</span>
+<span class="nc" id="L135">			System.out.println();</span>
+<span class="nc" id="L136">			afterorder.setPaymentStatus(&quot;Try after some time&quot;);</span>
+			
+<span class="nc" id="L138">			LinkedList&lt;AfterOrder&gt; allUsersList = new LinkedList&lt;AfterOrder&gt;();</span>
+<span class="nc" id="L139">			allUsersList.add(new AfterOrder(afterorder.getPaymentID(), afterorder.getPaymentStatus()));</span>
+<span class="nc" id="L140">			allData.put(&quot;OrderID&quot;, allUsersList);</span>
+			
+		}
+<span class="nc" id="L143">		return allData;</span>
+	}
+	
+	public static int getRandomNumber(){
+<span class="nc" id="L147">	    int x = (int)(Math.random()*((1000-1)+1))+1;</span>
+<span class="nc" id="L148">	    return x;</span>
+	}
+	
+	
+	/**2... Post api for changing payment status**/
+	@RequestMapping(method = RequestMethod.POST, value = &quot;/buynow&quot;, headers = { &quot;content-type=application/json&quot; })
+	@ResponseStatus(HttpStatus.ACCEPTED)
+	@ResponseBody	
+	public Map&lt;String,LinkedList&lt;AfterPayment&gt;&gt; buynow(@RequestBody Payment paymentjson) throws Exception {
+<span class="nc" id="L157">		System.out.println(&quot;2nd API&quot;);</span>
+<span class="nc" id="L158">		Map&lt;String,LinkedList&lt;AfterPayment&gt;&gt;  allData=new LinkedHashMap&lt;String,LinkedList&lt;AfterPayment&gt;&gt;();</span>
+<span class="nc" id="L159">		DBConnection dbcon = new DBConnection();</span>
+<span class="nc" id="L160">		Connection con = dbcon.connectToDB();</span>
+<span class="nc" id="L161">		int val=restApi.changeStatusOfPayment(con,paymentjson);</span>
+<span class="nc bnc" id="L162" title="All 2 branches missed.">		if (val != 0) {</span>
+<span class="nc" id="L163">			afterpayment.setPaymentstatus(&quot;Pending&quot;);</span>
+<span class="nc" id="L164">			afterpayment.setPaymenttype(&quot;Please select the payment&quot;);</span>
+<span class="nc" id="L165">			afterpayment.setOtp(val);</span>
+<span class="nc" id="L166">			LinkedList&lt;AfterPayment&gt; allUsersList = new LinkedList&lt;AfterPayment&gt;();</span>
+<span class="nc" id="L167">			allUsersList.add(new AfterPayment(afterpayment.getPaymentstatus(), afterpayment.getPaymenttype(),afterpayment.getOtp()));</span>
+<span class="nc" id="L168">			allData.put(&quot;product availability&quot;, allUsersList);</span>
+<span class="nc" id="L169">		}else {</span>
+<span class="nc" id="L170">			afterpayment.setPaymenttype(&quot;try after some time&quot;);	</span>
+<span class="nc" id="L171">			afterpayment.setOtp(val);</span>
+<span class="nc" id="L172">			LinkedList&lt;AfterPayment&gt; allUsersList = new LinkedList&lt;AfterPayment&gt;();</span>
+<span class="nc" id="L173">			allUsersList.add(new AfterPayment(afterpayment.getPaymentstatus(), afterpayment.getPaymenttype(),afterpayment.getOtp()));</span>
+<span class="nc" id="L174">			allData.put(&quot;product availability&quot;, allUsersList);</span>
+		}
+<span class="nc" id="L176">		return allData;</span>
+		
+	}
+	
+	/**3... Post api for changing payment status**/
+	@RequestMapping(method = RequestMethod.POST, value = &quot;/addpayment&quot;, headers = { &quot;content-type=application/json&quot; })
+	@ResponseStatus(HttpStatus.ACCEPTED)
+	@ResponseBody	
+	public MessageBean addpayment(@RequestBody PaymentType paymenttypejson) throws Exception {
+<span class="nc" id="L185">		System.out.println(&quot;3rd API&quot;);</span>
+<span class="nc" id="L186">		Map&lt;String,LinkedList&lt;AfterPayment&gt;&gt;  allData=new LinkedHashMap&lt;String,LinkedList&lt;AfterPayment&gt;&gt;();</span>
+<span class="nc" id="L187">		DBConnection dbcon = new DBConnection();</span>
+<span class="nc" id="L188">		Connection con = dbcon.connectToDB();</span>
+<span class="nc" id="L189">		int val=restApi.changeStatusOfPaymenttype(con,paymenttypejson);</span>
+<span class="nc bnc" id="L190" title="All 2 branches missed.">		if (val == 1) {</span>
+<span class="nc" id="L191">			msg.setStatus(202);</span>
+<span class="nc" id="L192">			msg.setMessage(&quot;Payment status completed successfully&quot;);</span>
+<span class="nc" id="L193">			return msg;</span>
+//			afterpayment.setPaymentstatus(&quot;Completed&quot;);
+//			afterpayment.setPaymenttype(paymenttypejson.getPaymenttype());		
+//			LinkedList&lt;AfterPayment&gt; allUsersList = new LinkedList&lt;AfterPayment&gt;();
+//			allUsersList.add(new AfterPayment(afterpayment.getPaymentstatus(), afterpayment.getPaymenttype()));
+//			allData.put(&quot;product availability&quot;, allUsersList);
+		}else {
+<span class="nc" id="L200">			msg.setStatus(500);</span>
+<span class="nc" id="L201">			msg.setMessage(&quot;Please try after sometime&quot;);</span>
+<span class="nc" id="L202">			return msg;</span>
+//			afterpayment.setPaymenttype(&quot;error&quot;);	
+//			afterpayment.setPaymenttype(&quot;error&quot;);
+//			LinkedList&lt;AfterPayment&gt; allUsersList = new LinkedList&lt;AfterPayment&gt;();
+//			allUsersList.add(new AfterPayment(afterpayment.getPaymentstatus(), afterpayment.getPaymenttype()));
+//			allData.put(&quot;product availability&quot;, allUsersList);
+		}
+		
+		
+	}
+	/** Post Api for adding users **/
+	/*
+	 * request body required { &quot;username&quot;: &quot;value&quot;, &quot;password&quot;: &quot;value&quot;,
+	 * &quot;firstname&quot;: &quot;value&quot;, &quot;lastname&quot;: &quot;value&quot;, &quot;contact&quot;: &quot;value&quot;, &quot;address&quot;:
+	 * &quot;value&quot;, &quot;email&quot;: &quot;value&quot;, &quot;usertype&quot;: int val }
+	 */
+	@RequestMapping(method = RequestMethod.POST, value = &quot;/createUsers&quot;, headers = { &quot;content-type=application/json&quot; })
+	@ResponseStatus(HttpStatus.ACCEPTED)
+	@ResponseBody
+	public MessageBean addTopics(@RequestBody Users usersjson) throws Exception {
+
+<span class="nc" id="L223">		System.out.println(&quot;inserting users&quot;);</span>
+<span class="nc" id="L224">		DBConnection dbcon = new DBConnection();</span>
+<span class="nc" id="L225">		Connection con = dbcon.connectToDB();</span>
+<span class="nc" id="L226">		int i = restApi.insertUsers(con, usersjson);</span>
+<span class="nc" id="L227">		con.close();</span>
+<span class="nc bnc" id="L228" title="All 2 branches missed.">		if (i == 1) {</span>
+<span class="nc" id="L229">			msg.setStatus(202);</span>
+<span class="nc" id="L230">			msg.setMessage(&quot;Inserted successfully&quot;);</span>
+<span class="nc" id="L231">			return msg;</span>
+		} else {
+<span class="nc" id="L233">			msg.setStatus(500);</span>
+<span class="nc" id="L234">			msg.setMessage(&quot;Inserted unsuccessfully.Please try it later.&quot;);</span>
+<span class="nc" id="L235">			return msg;</span>
+		}
+
+	}
+
+	@RequestMapping(method = RequestMethod.PUT, value = &quot;/changeUsersType&quot;)
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public MessageBean updateTopics(@RequestBody Users user) throws Exception {
+<span class="nc" id="L244">		System.out.println(&quot;updating user&quot;);</span>
+<span class="nc bnc" id="L245" title="All 6 branches missed.">		if (user.getUsertype() == 1 || user.getUsertype() == 2 || user.getUsertype() == 3) {</span>
+<span class="nc" id="L246">			DBConnection dbcon = new DBConnection();</span>
+<span class="nc" id="L247">			Connection con = dbcon.connectToDB();</span>
+
+<span class="nc" id="L249">			int i = restApi.updateUsers(con, user, user.getEmail());</span>
+<span class="nc" id="L250">			System.out.println(i);</span>
+<span class="nc" id="L251">			con.close();</span>
+
+<span class="nc bnc" id="L253" title="All 2 branches missed.">			if (i == 1) {</span>
+<span class="nc" id="L254">				msg.setStatus(200);</span>
+<span class="nc" id="L255">				msg.setMessage(&quot;Updated successfully&quot;);</span>
+<span class="nc" id="L256">				return msg;</span>
+<span class="nc bnc" id="L257" title="All 2 branches missed.">			} else if (i &lt;= 0) {</span>
+<span class="nc" id="L258">				msg.setStatus(500);</span>
+<span class="nc" id="L259">				msg.setMessage(&quot;Updated unsuccessfully or Already updated.&quot;);</span>
+<span class="nc" id="L260">				return msg;</span>
+			} else {
+<span class="nc" id="L262">				msg.setStatus(200);</span>
+<span class="nc" id="L263">				msg.setMessage(&quot;Updated successfully&quot;);</span>
+<span class="nc" id="L264">				return msg;</span>
+			}
+		} else {
+<span class="nc" id="L267">			msg.setStatus(500);</span>
+<span class="nc" id="L268">			msg.setMessage(&quot;Invalid usertype.&quot;);</span>
+<span class="nc" id="L269">			return msg;</span>
+		}
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.7.201606060606</span></div></body></html>
